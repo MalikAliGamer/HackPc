@@ -1,0 +1,26 @@
+on:
+  workflow_call:
+    secrets:
+      WORKFLOW_GIT_TOKEN:
+        description: "Personal access token with repo scope"
+        required: true
+env:
+  example-repo: "example-repo"
+  
+jobs:
+  deploy:
+    name: Funky example
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout workflow scripts
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.repository.owner.login}}/workflows
+          ref: master
+          token: ${{ secrets.WORKFLOW_GIT_TOKEN }}
+          path: ${{ env.example-repo }}
+          
+       - name: Do funny stuff with python
+        run: |
+          python ${{ env.example-repo }}/scripts/funny_script.py
